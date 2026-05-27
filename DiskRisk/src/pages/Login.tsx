@@ -35,28 +35,19 @@ export default function Login(): React.JSX.Element {
 
         setLoading(true);
         try {
-            // Replace URL with your auth endpoint. This example expects { token } on success.
-            const res = await fetch("/api/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password, remember }),
-            });
+            // Simulação de login — substitua por chamada real à sua API
+            await new Promise((res) => setTimeout(res, 800));
 
-            const data = (await res.json()) as LoginResponse;
-            if (!res.ok) {
-                throw new Error(data.error ?? "Login failed");
+            if (email === "admin@diskrisk.com" && password === "123456") {
+                const fakeToken = "mock-token-xyz";
+                if (remember) localStorage.setItem("authToken", fakeToken);
+                else sessionStorage.setItem("authToken", fakeToken);
+                navigate("/home");
+            } else {
+                throw new Error("Email ou senha inválidos");
             }
-
-            // Example: store token (adjust to your auth strategy)
-            if (data.token) {
-                if (remember) localStorage.setItem("authToken", data.token);
-                else sessionStorage.setItem("authToken", data.token);
-            }
-
-            // navigate to protected area
-            navigate("/dashboard");
         } catch (err: any) {
-            setFormError(err?.message ?? "An unexpected error occurred");
+            setFormError(err?.message ?? "Ocorreu um erro inesperado");
         } finally {
             setLoading(false);
         }
